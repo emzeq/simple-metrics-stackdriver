@@ -6,7 +6,7 @@ using static Google.Api.MetricDescriptor.Types;
 
 namespace Simple.Metrics.Stackdriver.UnitTests
 {
-    public class MetricRecorderFlushTests
+    public class MetricRecorderTests
     {
         private readonly FakeMetricExporter _fakeExporter = new FakeMetricExporter();
         private readonly MetricsRecorder _metrics = new MetricsRecorder(new NullLogger<MetricsRecorder>());
@@ -15,7 +15,7 @@ namespace Simple.Metrics.Stackdriver.UnitTests
         public async Task Recorder_Flush_GroupsNameAndLabels()
         {
             _metrics.Set("request_latency_ms", 100, ("action", "get_user"));
-            _metrics.Set("disk_utilized_bytes", 20.5, ("disk", "/dev/sda1"));
+            _metrics.Set("disk_utilized_bytes", 2002804, ("disk", "/dev/sda1"));
             _metrics.Set("request_latency_ms", 300, ("action", "get_user"));
             _metrics.Set("request_latency_ms", 400, ("action", "get_attempts"));
 
@@ -27,10 +27,10 @@ namespace Simple.Metrics.Stackdriver.UnitTests
                 MetricKind.Gauge,
                 300,
                 ("action", "get_user"));
-            _fakeExporter.AssertExportedDouble(
+            _fakeExporter.AssertExportedInt64(
                 "disk_utilized_bytes",
                 MetricKind.Gauge,
-                20.5,
+                2002804,
                 ("disk", "/dev/sda1"));
             _fakeExporter.AssertExportedInt64(
                 "request_latency_ms",
@@ -104,8 +104,8 @@ namespace Simple.Metrics.Stackdriver.UnitTests
         {
             _metrics.Increment("total_requests", 25);
             _metrics.Increment("total_errors", 42L);
-            _metrics.Increment("gpu_1_temp_c", 25.4F);
-            _metrics.Increment("gpu_2_temp_c", 28.8D);
+            _metrics.Increment("data_read_gigabytes", 25.4F);
+            _metrics.Increment("data_write_gigabytes", 28.8D);
 
             await _metrics.FlushAsync(_fakeExporter);
 
@@ -119,11 +119,11 @@ namespace Simple.Metrics.Stackdriver.UnitTests
                 MetricKind.Gauge,
                 42);
             _fakeExporter.AssertExportedDouble(
-                "gpu_1_temp_c",
+                "data_read_gigabytes",
                 MetricKind.Gauge,
                 25.4);
             _fakeExporter.AssertExportedDouble(
-                "gpu_2_temp_c",
+                "data_write_gigabytes",
                 MetricKind.Gauge,
                 28.8);
         }
