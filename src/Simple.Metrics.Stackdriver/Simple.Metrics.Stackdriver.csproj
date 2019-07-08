@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Monitoring.V3" Version="1.0.0" />
+    <PackageReference Include="HdrHistogram" Version="2.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>$(MSBuildProjectName).UnitTests</_Parameter1>
+      </AssemblyAttribute>
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>$(MSBuildProjectName).Benchmarks</_Parameter1>
+      </AssemblyAttribute>
+  </ItemGroup>
+</Project>
